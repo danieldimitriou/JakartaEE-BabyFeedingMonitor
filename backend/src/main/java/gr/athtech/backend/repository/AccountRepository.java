@@ -11,8 +11,8 @@ import java.util.Optional;
 public interface AccountRepository {
 
 
-    Optional<Account> getAccountById(int id) throws SQLException;
+    Account getAccountById(Long id) throws SQLException;
     void createAccount(Account account);
     Optional<Account> updateAccount(Account account);
-    boolean deleteAccount(int id);
+    boolean deleteAccount(Long id);
 }

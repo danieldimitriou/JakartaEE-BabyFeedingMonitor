@@ -11,6 +11,8 @@ import jakarta.ws.rs.core.Response;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.SQLException;
+
 @Path("/account")
 public class AccountResource {
     @Inject
@@ -18,8 +20,10 @@ public class AccountResource {
     private static final Logger logger = LogManager.getLogger(AccountResource.class);
     @Path("hello")
     @GET
-    public String sayHello() {
-        return "Hello account " ;
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String sayHello() throws SQLException {
+//        Account a = accountRepository.getAccountById(1L);
+        return "Hello account ";
     }
 
     @POST

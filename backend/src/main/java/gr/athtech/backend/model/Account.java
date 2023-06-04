@@ -13,8 +13,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "account")
 public class Account {
     @Id
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @Column(name = "first_name")
     @NotNull
     private String firstName;
@@ -24,6 +25,7 @@ public class Account {
 
     @Enumerated(EnumType.STRING)
     @NotNull
+    @Column(name = "role")
     private Role role;
 
     public Account(String firstName, String lastName, Role role){
