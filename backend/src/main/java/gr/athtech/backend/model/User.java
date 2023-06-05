@@ -10,32 +10,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "account")
-public class Account {
+@Table(name = "users")
+public class User {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "first_name")
     @NotNull
     private String firstName;
+
     @Column(name = "last_name")
     @NotNull
     private String lastName;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
     @Column(name = "role")
-    private Role role;
+    @NotNull
+    private String role;
 
-    public Account(String firstName, String lastName, Role role){
+    public User(String firstName, String lastName, String role){
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
     }
 
-    public String getRole(){
-        return this.role.name();
-    }
 
 }

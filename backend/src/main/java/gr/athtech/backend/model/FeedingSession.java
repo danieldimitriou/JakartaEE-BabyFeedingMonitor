@@ -1,6 +1,5 @@
 package gr.athtech.backend.model;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,25 +15,28 @@ public class FeedingSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     //feeding session information
-    @Column
-    @NotNull
+    @Column(name = "amount_consumed")
     double amountConsumed;
-    @Column
-    @NotNull
+    @Column(name = "start_time")
     LocalDateTime startTime;
-    @Column
-    @NotNull
+    @Column(name = "end_time")
     LocalDateTime endTime;
     //the account of the parent logging the information
-
+    @Column(name = "duration")
+    String duration;
     @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Account parent;
+    User user;
 
-    public FeedingSession(double amountConsumed, LocalDateTime startTime, LocalDateTime endTime, Account parent){
+
+    public FeedingSession(double amountConsumed, LocalDateTime startTime, LocalDateTime endTime){
         this.amountConsumed = amountConsumed;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.parent = parent;
+    }
+    public FeedingSession(double amountConsumed, LocalDateTime startTime, LocalDateTime endTime, String duration){
+        this.amountConsumed = amountConsumed;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.duration = duration;
     }
 }

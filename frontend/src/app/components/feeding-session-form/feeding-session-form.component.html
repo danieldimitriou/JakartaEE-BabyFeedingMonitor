@@ -1,0 +1,18 @@
+<div class="container">
+  <h2>Add Feeding Session</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="amountConsumed">Amount Consumed:</label>
+      <input type="number" class="form-control" id="amountConsumed" name="amountConsumed" [(ngModel)]="feedingSession.amountConsumed" required>
+    </div>
+    <div class="form-group">
+      <label for="startDate">Start Date:</label>
+      <input type="datetime-local" class="form-control" id="startDate" name="startDate" [(ngModel)]="feedingSession.startDate" required>
+    </div>
+    <div class="form-group">
+      <label for="endDate">End Date:</label>
+      <input type="datetime-local" class="form-control" id="endDate" name="endDate" [(ngModel)]="feedingSession.endDate" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
