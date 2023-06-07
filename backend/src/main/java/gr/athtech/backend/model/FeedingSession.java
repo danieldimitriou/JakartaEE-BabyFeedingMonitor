@@ -4,39 +4,50 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "feeding_session")
 public class FeedingSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
     //feeding session information
     @Column(name = "amount_consumed")
-    double amountConsumed;
+    private double amountConsumed;
     @Column(name = "start_time")
-    LocalDateTime startTime;
+    private LocalTime startTime;
     @Column(name = "end_time")
-    LocalDateTime endTime;
+    private LocalTime endTime;
+
+    @Column(name = "date")
+    private LocalDate date;
     //the account of the parent logging the information
     @Column(name = "duration")
-    String duration;
+    private Long duration;
     @ManyToOne
-    User user;
+    private User user;
 
 
-    public FeedingSession(double amountConsumed, LocalDateTime startTime, LocalDateTime endTime){
+    public FeedingSession(double amountConsumed, LocalTime startTime, LocalTime endTime, LocalDate date){
         this.amountConsumed = amountConsumed;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.date = date;
+        //calculate the duration of the feeding session
+        Duration dur = Duration.between(startTime, endTime);
+        this.duration = dur.toMinutes();
     }
-    public FeedingSession(double amountConsumed, LocalDateTime startTime, LocalDateTime endTime, String duration){
+    public FeedingSession(double amountConsumed, LocalTime startTime, LocalTime endTime, LocalDate date, Long duration){
         this.amountConsumed = amountConsumed;
         this.startTime = startTime;
         this.endTime = endTime;
         this.duration = duration;
+        this.date = date;
     }
 }

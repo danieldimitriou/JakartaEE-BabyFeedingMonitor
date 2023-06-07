@@ -2,31 +2,41 @@ package gr.athtech.backend.repository;
 
 import gr.athtech.backend.model.User;
 import gr.athtech.backend.model.FeedingSession;
+import gr.athtech.backend.repository.repositoryImpl.UserRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class TableCreator {
+    private static final Logger logger = LogManager.getLogger(UserRepositoryImpl.class);
+
     public static void main(String[] args) {
         User admin = new User("daniel","dimitriou","admin");
         User parent = new User("daniel","dimitriou","parent");
 
         String start = "2023-06-04T10:30:00";
         String end = "2023-06-04T10:32:19";
-        LocalDateTime startTime = LocalDateTime.parse(start);
-        LocalDateTime endTime = LocalDateTime.parse(end);
+//        LocalDateTime startTime = LocalDateTime.parse(start);
+//        LocalDateTime endTime = LocalDateTime.parse(end);
+        LocalTime startTime = LocalTime.of(10, 0);
+        LocalTime endTime = LocalTime.of(11, 32);
         Duration duration = Duration.between(startTime, endTime);
-        long durationInSeconds = duration.getSeconds();
-
-        long minutes = durationInSeconds / 60;
-        long seconds = durationInSeconds % 60;
-
-        String formattedDuration = String.format("%d:%02d", minutes, seconds);
-        FeedingSession feedingSession = new FeedingSession(33,startTime,endTime,formattedDuration);
+        LocalDate feedingDate = LocalDate.of(2023, 6, 3);
+        FeedingSession feedingSession = new FeedingSession(33.0, startTime,endTime,
+                feedingDate);
         feedingSession.setUser(parent);
+        logger.error("FeedingSession(id={}, amountConsumed={}, startTime={}, endTime={}, date={}, duration={}, user={})",
+                feedingSession.getId(), feedingSession.getAmountConsumed(), feedingSession.getStartTime(),
+                feedingSession.getEndTime(), feedingSession.getDate(), feedingSession.getDuration(),
+                feedingSession.getUser());
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();

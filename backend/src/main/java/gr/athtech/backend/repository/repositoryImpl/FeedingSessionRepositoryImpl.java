@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -22,33 +23,36 @@ public class FeedingSessionRepositoryImpl implements FeedingSessionRepository {
     private static final Logger logger = LogManager.getLogger(UserRepositoryImpl.class);
 
     @Override
-    public Optional<FeedingSession> getFeedingSessionById(int id) {
+    public Optional<FeedingSession> getById(int id) {
         entityManager.find(User.class,id);
         return Optional.empty();
     }
+    @Override
+    public Optional<List<FeedingSession>> getAll() {
+        entityManager.find(User.class, getAll());
+        return Optional.empty();
+    }
+
 
     @Override
-    public void createFeedingSession(FeedingSession feedingSession) {
-
-
-//        Duration duration = Duration.between(feedingSession.getStartTime(), feedingSession.getEndTime());
-//        long durationInSeconds = duration.getSeconds();
-//
-//        long minutes = durationInSeconds / 60;
-//        long seconds = durationInSeconds % 60;
-//
-//        String formattedDuration = String.format("%d:%02d", minutes, seconds);
-//        feedingSession.setDuration(formattedDuration);
-        this.entityManager.persist(feedingSession);
+    public boolean create(FeedingSession feedingSession) {
+        try {
+            this.entityManager.persist(feedingSession);
+            return true; // Entity saved successfully
+        } catch (Exception e) {
+            // Handle any exceptions or errors that occurred during persistence
+            e.printStackTrace();
+            return false; // Failed to save the entity
+        }
     }
 
     @Override
-    public Optional<FeedingSession> updateFeedingSession(FeedingSession feedingSession) {
+    public Optional<FeedingSession> update(FeedingSession feedingSession) {
         return Optional.empty();
     }
 
     @Override
-    public boolean deleteFeedingSession(int id) {
+    public boolean delete(int id) {
         return false;
     }
 }
