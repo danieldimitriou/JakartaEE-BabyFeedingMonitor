@@ -1,54 +1,68 @@
 package gr.athtech.backend.repository.repositoryImpl;
 
+import gr.athtech.backend.Database;
 import gr.athtech.backend.model.FeedingSession;
 import gr.athtech.backend.model.User;
 import gr.athtech.backend.repository.FeedingSessionRepository;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import jakarta.persistence.*;
 
-import java.time.Duration;
+import javax.enterprise.context.ApplicationScoped;
+import javax.transaction.Transactional;
+import javax.xml.crypto.Data;
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 @Transactional
 public class FeedingSessionRepositoryImpl implements FeedingSessionRepository {
-    @PersistenceContext(unitName = "default")
-    private EntityManager entityManager;
 
-    private static final Logger logger = LogManager.getLogger(UserRepositoryImpl.class);
+//    private static final Logger logger = LogManager.getLogger(UserRepositoryImpl.class);
 
     @Override
-    public Optional<FeedingSession> getFeedingSessionById(int id) {
-        entityManager.find(User.class,id);
-        return Optional.empty();
+    public Optional<FeedingSession> getById(int id) {
+        try {
+            return Database.queryById(FeedingSession.class, id);
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception properly, e.g., log the error
+            return Optional.empty();
+        }
     }
 
     @Override
-    public void createFeedingSession(FeedingSession feedingSession) {
+    public Optional<List<FeedingSession>> getAll() {
+        try {
+            return Database.queryAll(FeedingSession.class);
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception properly, e.g., log the error
+            return Optional.empty();
+        }
+    }
 
 
-//        Duration duration = Duration.between(feedingSession.getStartTime(), feedingSession.getEndTime());
-//        long durationInSeconds = duration.getSeconds();
-//
-//        long minutes = durationInSeconds / 60;
-//        long seconds = durationInSeconds % 60;
-//
-//        String formattedDuration = String.format("%d:%02d", minutes, seconds);
-//        feedingSession.setDuration(formattedDuration);
-        this.entityManager.persist(feedingSession);
+    @Override
+    public boolean create(FeedingSession feedingSession) {
+        try {
+            return Database.persist(feedingSession);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Optional<FeedingSession> update(FeedingSession feedingSession) {
+        try {
+            return Database.update(feedingSession);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public Optional<FeedingSession> updateFeedingSession(FeedingSession feedingSession) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean deleteFeedingSession(int id) {
-        return false;
+    public boolean delete(int id) {
+        try {
+            return Database.delete(id, FeedingSession.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

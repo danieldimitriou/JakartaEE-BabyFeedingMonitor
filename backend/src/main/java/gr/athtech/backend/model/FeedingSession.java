@@ -1,42 +1,62 @@
 package gr.athtech.backend.model;
+
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.sql.Time;
+import java.time.Duration;
+import java.sql.Date;
+
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "feeding_session")
 public class FeedingSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-    //feeding session information
+    private int id;
+
+    // Feeding session information
     @Column(name = "amount_consumed")
-    double amountConsumed;
+    private double amountConsumed;
+
     @Column(name = "start_time")
-    LocalDateTime startTime;
+    private Time startTime;
+
     @Column(name = "end_time")
-    LocalDateTime endTime;
-    //the account of the parent logging the information
+    private Time endTime;
+
+    @Column(name = "date")
+    private Date date;
+
+    // The account of the parent logging the information
     @Column(name = "duration")
-    String duration;
+    private long duration;
+
     @ManyToOne
-    User user;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-
-    public FeedingSession(double amountConsumed, LocalDateTime startTime, LocalDateTime endTime){
+    public FeedingSession(double amountConsumed, Time startTime, Time endTime, Date date) {
         this.amountConsumed = amountConsumed;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.date = date;
+        calculateDuration();
     }
-    public FeedingSession(double amountConsumed, LocalDateTime startTime, LocalDateTime endTime, String duration){
-        this.amountConsumed = amountConsumed;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.duration = duration;
+
+    public void calculateDuration() {
+        long startTimeMillis = startTime.getTime();
+        long endTimeMillis = endTime.getTime();
+        long durationMillis = endTimeMillis - startTimeMillis;
+        long durationMinutes = durationMillis / (1000 * 60);  // Convert milliseconds to minutes
+        this.duration = Duration.ofMinutes(durationMinutes).toMinutes();
     }
+
+//    public String getDurationAsString() {
+//        long durationMinutes = duration.toMinutes();
+//        return durationMinutes + " minutes";
+//    }
+
 }

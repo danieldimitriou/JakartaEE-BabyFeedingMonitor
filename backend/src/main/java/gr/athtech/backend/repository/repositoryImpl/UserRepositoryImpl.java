@@ -1,11 +1,19 @@
 package gr.athtech.backend.repository.repositoryImpl;
+import gr.athtech.backend.Database;
+import gr.athtech.backend.JWTGenerator;
+import gr.athtech.backend.model.FeedingSession;
+import gr.athtech.backend.model.LoginResponseData;
 import gr.athtech.backend.model.User;
 import gr.athtech.backend.repository.UserRepository;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.security.auth.login.LoginException;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -24,13 +32,12 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void createUser(User user) {
-        try{
-            entityManager.persist(user);
-        }catch (Exception e){
-            logger.error(e);
+    public boolean createUser(User user) {
+        try {
+            return Database.persist(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
     }
 
 
@@ -42,5 +49,35 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public boolean deleteUser(Long id) {
         return false;
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        String query = "SELECT u FROM User u WHERE u.email = :email";
+        try {
+            List<String> parameterList = new ArrayList<>();
+            parameterList.add("email");
+            return Optional.ofNullable(Database.executeQuery(query, User.class, parameterList, email));
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception properly, e.g., log the error
+            return Optional.empty();
+        }
+    }
+
+    //very simple login
+    @Override
+    public LoginResponseData login(String email, String password) throws LoginException {
+        logger.error("Repo login");
+        Optional<User> user = this.getUserByEmail(email);
+        logger.error(user);
+        if(user.get().getPassword().equals(password)){
+            String jwt = JWTGenerator.generateToken(email, user.get().getRole());
+            String role = user.get().getRole();
+            LoginResponseData loginResponseData = new LoginResponseData(jwt, role);
+            return loginResponseData;
+        }else{
+            logger.error("else");
+            throw new LoginException("Invalid email or password");
+        }
     }
 }

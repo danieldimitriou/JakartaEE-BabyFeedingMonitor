@@ -1,10 +1,11 @@
 package gr.athtech.backend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
@@ -24,15 +25,23 @@ public class User {
     @Column(name = "last_name")
     @NotNull
     private String lastName;
+    @Column(name="email", unique = true)
+    @NotNull
+    private String email;
 
+    @Column(name="password")
+    @NotNull
+    private String password;
     @Column(name = "role")
     @NotNull
     private String role;
 
-    public User(String firstName, String lastName, String role){
+    public User(String firstName, String lastName, String role, String email, String password){
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        this.email = email;
+        this.password = password;
     }
 
 

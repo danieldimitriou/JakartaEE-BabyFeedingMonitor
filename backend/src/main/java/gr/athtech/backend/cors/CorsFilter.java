@@ -1,23 +1,23 @@
 package gr.athtech.backend.cors;
-
-
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.container.ContainerResponseContext;
-import jakarta.ws.rs.container.ContainerResponseFilter;
-import jakarta.ws.rs.ext.Provider;
-
+import javax.servlet.*;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Provider
-public class CorsFilter implements ContainerResponseFilter {
+public class CorsFilter implements Filter {
     @Override
-    public void filter(ContainerRequestContext requestContext,
-                       ContainerResponseContext responseContext) throws IOException {
+    public void init(FilterConfig filterConfig) throws ServletException {}
 
-        responseContext.getHeaders().add(  "Access-Control-Allow-Origin", "*");
-        responseContext.getHeaders().add(  "Access-Control-Allow-Credentials", "true");
-        responseContext.getHeaders().add(  "Access-Control-Allow-Headers",     "origin, content-type, accept, authorization");
-        responseContext.getHeaders().add(  "Access-Control-Allow-Methods",     "GET, POST, PUT, DELETE, OPTIONS, HEAD");
-        responseContext.getHeaders().add(  "Access-Control-Max-Age", "1209600");
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        chain.doFilter(request, response);
     }
+
+    @Override
+    public void destroy() {}
 }
