@@ -72,9 +72,7 @@ public class UserRepositoryImpl implements UserRepository {
         logger.error(user);
         if(user.get().getPassword().equals(password)){
             String jwt = JWTGenerator.generateToken(email, user.get().getRole());
-            String role = user.get().getRole();
-            LoginResponseData loginResponseData = new LoginResponseData(jwt, role);
-            return loginResponseData;
+            return new LoginResponseData(jwt, user.get().getRole(), "200");
         }else{
             logger.error("else");
             throw new LoginException("Invalid email or password");

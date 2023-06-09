@@ -1,5 +1,10 @@
+import {Time} from "@angular/common";
+
 export interface FeedingSession {
+  id?: number;
   amountConsumed: number;
-  startDate: string; // LocalDateTime format as a string
-  endDate: string; // LocalDateTime format as a string
+  date: Date; // LocalDateTime format as a string
+  startTime: string;
+  endTime: string;
+  duration?: number;
 }

@@ -18,7 +18,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
-import java.util.List;
 
 @Path("/user")
 public class UserResource {
@@ -54,8 +53,8 @@ public class UserResource {
     public Response login(LoginData loginData) throws SQLException, JsonProcessingException, LoginException {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            LoginResponseData loginResponseData = this.userService.login(loginData);
-            String responseJson = objectMapper.writeValueAsString(new LoginSuccessResponse(loginResponseData.getJwt(),200, loginResponseData.getRole()));
+            LoginResponseData loginResponseData= this.userService.login(loginData);
+            String responseJson = objectMapper.writeValueAsString(loginResponseData);
             return Response.status(Response.Status.OK)
                     .entity(responseJson)
                     .build();

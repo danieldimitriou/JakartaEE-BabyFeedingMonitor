@@ -1,0 +1,31 @@
+<div class="text-center">
+  <button type="button" (click)="createFeedingSession" routerLink="/newFeedingSession"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create New Feeding Session</button>
+</div>
+
+
+<div class="max-w-full">
+  <div class="grid grid-cols-3 gap-4 justify-between">
+    <ng-container *ngFor="let session of feedingSessions">
+      <div class="border border-gray-300 rounded-lg p-6 bg-white shadow-md w-72 text-justify justify-self-center cursor-pointer"
+            routerLink="/newFeedingSession">
+        <div class="inner-div">
+          <div class="text-lg font-semibold">Date: {{ session.id  }}</div>
+          <div class="text-lg font-semibold">Date: {{ session.date | date }}</div>
+          <div class="mt-2">Start Time: {{ session.startTime }}</div>
+          <div>End Time: {{ session.endTime }}</div>
+          <div>Duration: {{ session.duration }}</div>
+          <div>Amount Consumed: {{ session.amountConsumed }}</div>
+        </div>
+        <div class="m-3">
+          <div class="text-center mb-2 mt-12">
+            <button type="button" (click)="createFeedingSession" routerLink="/updateFeedingSession" [queryParams]="{ id: session.id }"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-2 rounded w-full">Update</button>
+            <button type="button" (click)="deleteFeedingSession(session.id)"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-2 rounded w-full">Delete</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

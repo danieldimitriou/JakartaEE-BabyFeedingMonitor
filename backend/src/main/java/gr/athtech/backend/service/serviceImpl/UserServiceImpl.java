@@ -11,7 +11,6 @@ import org.apache.logging.log4j.core.Logger;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {

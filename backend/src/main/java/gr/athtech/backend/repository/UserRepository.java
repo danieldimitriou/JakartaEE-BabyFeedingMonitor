@@ -5,7 +5,6 @@ import gr.athtech.backend.model.User;
 
 import javax.security.auth.login.LoginException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 

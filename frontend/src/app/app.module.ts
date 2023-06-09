@@ -6,21 +6,34 @@ import { AppComponent } from './app.component';
 import { HomeComponentComponent } from './components/home-component/home-component.component';
 import { FeedingSessionFormComponent } from './components/feeding-session-form/feeding-session-form.component';
 import { LoginComponent } from './components/login/login.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { TimePickerComponent } from './components/time-picker/time-picker.component';
+import { AdminHomeComponent } from './components/admin-home/admin-home.component';
+import { PhysicianHomeComponent } from './components/physician-home/physician-home.component';
+import { UpdateFeedingSessionComponent } from './components/update-feeding-session/update-feeding-session.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponentComponent,
     FeedingSessionFormComponent,
-    LoginComponent
+    LoginComponent,
+    TimePickerComponent,
+    AdminHomeComponent,
+    PhysicianHomeComponent,
+    UpdateFeedingSessionComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    NgxMaterialTimepickerModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

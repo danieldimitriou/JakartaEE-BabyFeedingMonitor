@@ -1,0 +1,13 @@
+<div class="max-w-full m-10">
+  <div class="grid grid-cols-3 gap-4 justify-between">
+    <ng-container *ngFor="let session of feedingSessions">
+      <div class="border border-gray-300 rounded-lg p-6 bg-white shadow-md max-w-xs text-justify">
+        <div class="text-lg font-semibold">Date: {{ session.date | date }}</div>
+        <div class="mt-2">Start Time: {{ session.startTime }}</div>
+        <div>End Time: {{ session.endTime }}</div>
+        <div>Duration: {{ session.duration }}</div>
+        <div>Amount Consumed: {{ session.amountConsumed }}</div>
+      </div>
+    </ng-container>
+  </div>
+</div>
