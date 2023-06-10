@@ -14,6 +14,7 @@ import { TimePickerComponent } from './components/time-picker/time-picker.compon
 import { AdminHomeComponent } from './components/admin-home/admin-home.component';
 import { PhysicianHomeComponent } from './components/physician-home/physician-home.component';
 import { UpdateFeedingSessionComponent } from './components/update-feeding-session/update-feeding-session.component';
+import { HeaderComponent } from './components/common/header/header.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { UpdateFeedingSessionComponent } from './components/update-feeding-sessi
     TimePickerComponent,
     AdminHomeComponent,
     PhysicianHomeComponent,
-    UpdateFeedingSessionComponent
+    UpdateFeedingSessionComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

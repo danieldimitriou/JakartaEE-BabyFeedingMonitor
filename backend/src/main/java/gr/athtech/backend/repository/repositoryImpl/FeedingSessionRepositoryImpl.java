@@ -1,14 +1,19 @@
 package gr.athtech.backend.repository.repositoryImpl;
 
 import gr.athtech.backend.Database;
+import gr.athtech.backend.dto.FeedingSessionListDTO;
 import gr.athtech.backend.model.FeedingSession;
 import gr.athtech.backend.model.User;
 import gr.athtech.backend.repository.FeedingSessionRepository;
 import jakarta.persistence.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 import javax.xml.crypto.Data;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +21,7 @@ import java.util.Optional;
 @Transactional
 public class FeedingSessionRepositoryImpl implements FeedingSessionRepository {
 
-//    private static final Logger logger = LogManager.getLogger(UserRepositoryImpl.class);
+    private static final Logger logger = LogManager.getLogger(FeedingSessionRepositoryImpl.class);
 
     @Override
     public Optional<FeedingSession> getById(int id) {
@@ -28,10 +33,11 @@ public class FeedingSessionRepositoryImpl implements FeedingSessionRepository {
         }
     }
 
+
     @Override
-    public Optional<List<FeedingSession>> getAll() {
+    public Optional<FeedingSessionListDTO> getAll() {
         try {
-            return Database.queryAll(FeedingSession.class);
+            return Database.queryAllFeedingSessions(FeedingSession.class);
         } catch (Exception e) {
             e.printStackTrace(); // Handle the exception properly, e.g., log the error
             return Optional.empty();
@@ -65,4 +71,24 @@ public class FeedingSessionRepositoryImpl implements FeedingSessionRepository {
             return false;
         }
     }
+
+    @Override
+    public Optional<FeedingSessionListDTO> getByDates(Date startDate, Date endDate) {
+        try {
+            String jpql = "SELECT e FROM FeedingSession e WHERE e.date BETWEEN ?1 AND ?2";
+
+            java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime());
+            java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
+
+            List<FeedingSession> feedingSessions = Database.executeListQuery(jpql, FeedingSession.class, sqlStartDate, sqlEndDate);
+            logger.error(feedingSessions);
+            FeedingSessionListDTO feedingSessionListDTO = new FeedingSessionListDTO(feedingSessions);
+
+            return Optional.of(feedingSessionListDTO);
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception properly, e.g., log the error
+            return Optional.empty();
+        }
+    }
+
 }

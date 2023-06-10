@@ -1,11 +1,11 @@
 package gr.athtech.backend;
+import gr.athtech.backend.dto.FeedingSessionListDTO;
+import gr.athtech.backend.model.FeedingSession;
 import jakarta.persistence.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
 
 public class Database {
     private static final Logger logger = (Logger) LogManager.getLogger(Database.class);
@@ -98,6 +98,23 @@ public class Database {
             }
         }
     }
+    public static Optional<FeedingSessionListDTO> queryAllFeedingSessions(Class<FeedingSession> entityClass) {
+        EntityManager entityManager = null;
+        try {
+            entityManager = getEntityManagerFactory().createEntityManager();
+            String queryStr = "SELECT e FROM " + entityClass.getSimpleName() + " e";
+            TypedQuery<FeedingSession> query = entityManager.createQuery(queryStr, entityClass);
+            List<FeedingSession> resultList = query.getResultList();
+
+            FeedingSessionListDTO dto = new FeedingSessionListDTO(resultList);
+            return Optional.of(dto);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+    }
+
 
     public static <T> boolean delete(int id, Class<T> entityClass) {
         EntityManager entityManager = getEntityManagerFactory().createEntityManager();
@@ -145,6 +162,27 @@ public class Database {
         }
 
     }
+    public static <T> List<T> executeListQuery(String jpqlQuery, Class<T> entityClass, Object... parameters) {
+        EntityManager entityManager = null;
+        try {
+            entityManager = getEntityManagerFactory().createEntityManager();
+            TypedQuery<T> query = entityManager.createQuery(jpqlQuery, entityClass);
+
+            for (int i = 0; i < parameters.length; i++) {
+                query.setParameter(i + 1, parameters[i]);
+            }
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle the exception properly, e.g., log the error
+            return Collections.emptyList();
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+    }
+
 
 
 }

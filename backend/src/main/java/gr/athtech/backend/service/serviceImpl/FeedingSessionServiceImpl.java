@@ -1,6 +1,7 @@
 package gr.athtech.backend.service.serviceImpl;
 
 
+import gr.athtech.backend.dto.FeedingSessionListDTO;
 import gr.athtech.backend.model.FeedingSession;
 import gr.athtech.backend.repository.FeedingSessionRepository;
 import gr.athtech.backend.service.FeedingSessionService;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.core.Logger;
 import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.ws.rs.NotFoundException;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,15 +32,13 @@ public class FeedingSessionServiceImpl implements FeedingSessionService {
     }
 
     @Override
-    public Optional<List<FeedingSession>> getAll() {
+    public Optional<FeedingSessionListDTO> getAll() {
         return this.feedingSessionRepository.getAll();
     }
 
 
     @Override
     public boolean createFeedingSession(FeedingSession feedingSession) throws NamingException {
-
-//        JsonObject jsonObject = Json.createReader(new StringReader(jsonData)).readObject();
         feedingSession.calculateDuration();
         logger.error(feedingSession);
         return this.feedingSessionRepository.create(feedingSession);
@@ -46,6 +46,7 @@ public class FeedingSessionServiceImpl implements FeedingSessionService {
 
     @Override
     public Optional<FeedingSession> updateFeedingSession(FeedingSession newFeedingSessionData) {
+        newFeedingSessionData.calculateDuration();
         return this.feedingSessionRepository.update(newFeedingSessionData);
     }
 
@@ -55,5 +56,10 @@ public class FeedingSessionServiceImpl implements FeedingSessionService {
         boolean d = this.feedingSessionRepository.delete(id);
         logger.error("DELETE RESSSS:" + d);
         return d;
+    }
+
+    @Override
+    public Optional<FeedingSessionListDTO> getByDates(Date startDate, Date endDate) {
+        return this.feedingSessionRepository.getByDates(startDate, endDate);
     }
 }

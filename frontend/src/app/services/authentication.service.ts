@@ -22,6 +22,10 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
+  logout(){
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
+  }
   login(loginData: LoginData): Observable<any>{
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -29,7 +33,9 @@ export class AuthenticationService {
     return this.http.post(this.loginUrl, loginData, {headers: headers}).pipe(
       map(res => {
         if (res["statusCode"] == 200) {
-          return this.saveUserToLocalStorage(res["jwt"], res["role"]);
+          console.log(res);
+          this.saveUserToLocalStorage(res["jwt"], res["role"]);
+          return res["statusCode"];
         } else {
           return res["status"];
         }
@@ -39,8 +45,6 @@ export class AuthenticationService {
     );
 
   }
-
-
   saveUserToLocalStorage(jwt: string, role: string){
     let user: UserData = {
       jwt: jwt,

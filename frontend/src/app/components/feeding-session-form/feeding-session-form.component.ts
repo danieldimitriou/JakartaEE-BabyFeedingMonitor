@@ -3,6 +3,7 @@ import { FeedingSession } from "../../models/feeding-session";
 import { ApiService } from "../../services/api.service";
 import { DatePipe } from "@angular/common";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-feeding-session-form',
@@ -16,6 +17,7 @@ export class FeedingSessionFormComponent implements OnInit {
   feedingSessionForm: FormGroup;
   feedingSession: FeedingSession;
   constructor(
+    private router: Router,
     private apiService: ApiService,
     private datePipe: DatePipe,
     private formBuilder: FormBuilder
@@ -63,7 +65,10 @@ export class FeedingSessionFormComponent implements OnInit {
     console.log(this.feedingSession);
     this.apiService.createFeedingSession(this.feedingSession).subscribe(
       next => {
-        console.log(next);
+        if(next["message"] == "Resource Created successfully"){
+          this.router.navigate(['/adminHome']);
+        }
+        console.log(next["message"]);
       }
     );
   }
