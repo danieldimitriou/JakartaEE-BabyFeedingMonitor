@@ -3,9 +3,9 @@ package gr.athtech.backend.model;
 public class LoginResponseData {
     String jwt;
     String role;
-    String statusCode;
+    int statusCode;
 
-    public LoginResponseData(String jwt, String role, String statusCode) {
+    public LoginResponseData(String jwt, String role, int statusCode) {
         this.jwt = jwt;
         this.role = role;
         this.statusCode = statusCode;
@@ -27,11 +27,11 @@ public class LoginResponseData {
         this.role = role;
     }
 
-    public String getStatusCode() {
+    public int getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(String statusCode) {
+    public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
 }
