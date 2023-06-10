@@ -12,6 +12,7 @@
 //import javax.ws.rs.Priorities;
 //import javax.ws.rs.container.ContainerRequestContext;
 //import javax.ws.rs.container.ContainerRequestFilter;
+//import javax.ws.rs.container.PreMatching;
 //import javax.ws.rs.container.ResourceInfo;
 //import javax.ws.rs.core.Context;
 //import javax.ws.rs.core.Response;
@@ -20,8 +21,9 @@
 //
 //import static gr.athtech.backend.JWTGenerator.signingKey;
 //
+//@PreMatching
 //@Provider
-//@Priority(Priorities.AUTHORIZATION)
+//@Priority(Priorities.AUTHORIZATION + 1)
 //public class RoleBasedAccessFilter implements ContainerRequestFilter {
 //
 //    @Context
@@ -31,7 +33,7 @@
 //    @Override
 //    public void filter(ContainerRequestContext requestContext) {
 //        logger.error(requestContext.getUriInfo().getPath());
-//        if ("/user/login".equals(requestContext.getUriInfo().getPath())) {
+//        if ("user/login".equals(requestContext.getUriInfo().getPath())) {
 //            return;
 //        }
 //        // Extract the user's roles from the JWT or session
@@ -48,14 +50,14 @@
 //    }
 //
 //    private Set<String> extractUserRoles(ContainerRequestContext requestContext) {
+//        logger.error(requestContext.getHeaderString("Authorization"));
 //        // Extract the JWT token from the request headers
 //        String authorizationHeader = requestContext.getHeaderString("Authorization");
 //        String token = null;
 //        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 //            token = authorizationHeader.substring(7); // Remove "Bearer " prefix
 //        }
-//        logger.error("------------------------------------");
-//        logger.error(token);
+//
 //        // Extract the user roles from the JWT token
 //        if (token != null) {
 //            try {
@@ -79,6 +81,7 @@
 //
 //        return Collections.emptySet();
 //    }
+//
 //
 //
 //    private Set<String> getRequiredRoles(ResourceInfo resourceInfo) {

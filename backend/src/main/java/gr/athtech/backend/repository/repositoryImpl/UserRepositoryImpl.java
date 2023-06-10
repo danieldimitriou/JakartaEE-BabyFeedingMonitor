@@ -1,7 +1,6 @@
 package gr.athtech.backend.repository.repositoryImpl;
 import gr.athtech.backend.Database;
 import gr.athtech.backend.JWTGenerator;
-import gr.athtech.backend.model.FeedingSession;
 import gr.athtech.backend.model.LoginResponseData;
 import gr.athtech.backend.model.User;
 import gr.athtech.backend.repository.UserRepository;
@@ -72,7 +71,7 @@ public class UserRepositoryImpl implements UserRepository {
         logger.error(user);
         if(user.get().getPassword().equals(password)){
             String jwt = JWTGenerator.generateToken(email, user.get().getRole());
-            return new LoginResponseData(jwt, user.get().getRole(), "200");
+            return new LoginResponseData(jwt, user.get().getRole(),  200);
         }else{
             logger.error("else");
             throw new LoginException("Invalid email or password");

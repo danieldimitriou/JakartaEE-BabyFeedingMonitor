@@ -39,4 +39,8 @@ public class FeedingSessionListDTO {
     public void addFeedingSession(FeedingSession feedingSessionDTO) {
         this.feedingSessions.add(feedingSessionDTO);
     }
+
+    public int getSize(){
+        return this.feedingSessions.size();
+    }
 }

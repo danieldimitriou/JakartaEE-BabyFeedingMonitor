@@ -1,12 +1,9 @@
 package gr.athtech.backend.resource;
 import gr.athtech.backend.dto.FeedingSessionListDTO;
+import gr.athtech.backend.responses.ChartResponse;
 import gr.athtech.backend.responses.FeedingSessionListResponse;
-import org.glassfish.jersey.server.ResourceConfig;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import gr.athtech.backend.config.RoleBasedAccessFilter;
-//import gr.athtech.backend.config.UserStore;
 import gr.athtech.backend.model.FeedingSession;
 import gr.athtech.backend.repository.FeedingSessionRepository;
 import gr.athtech.backend.responses.ErrorResponse;
@@ -19,8 +16,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,11 +112,37 @@ public class FeedingSessionResource{
                         .build();
             }
         }catch (Exception e){
-            String responseJson = objectMapper.writeValueAsString(new SuccessResponse("Error occured when deleting resource."));
+            String responseJson = objectMapper.writeValueAsString(new ErrorResponse("Error occured when deleting resource."));
             throw new NotFoundException("Feeding session not found");
 
         }
     }
+    @Path("/chart")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getChart() throws JsonProcessingException {
+        logger.error("chart");
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            byte[] chart = this.feedingSessionService.getChart().get();
+
+                String responseJson = objectMapper.writeValueAsString(new ChartResponse("Chart Generated Successfully", chart));
+
+                return Response.status(Response.Status.CREATED)
+                        .entity(responseJson)
+                        .build();
+
+
+        }catch (Exception e){
+            String responseJson = objectMapper.writeValueAsString(new ErrorResponse(e.toString()));
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(responseJson)
+                    .build();
+
+        }
+    }
+
     @POST
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
