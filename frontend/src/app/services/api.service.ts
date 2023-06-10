@@ -54,6 +54,13 @@ export class ApiService {
     return this.http.get(`http://localhost:8080/backend_war_exploded/api/feedingSession/delete/${id}`, { headers: headers });
   }
 
+  getFeedingsessionChart(){
+    let headers: HttpHeaders = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`http://localhost:8080/backend_war_exploded/api/feedingSession/chart`, { headers: headers });
+  }
+
   getAllByDates(startDate: Date, endDate: Date) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
