@@ -66,6 +66,14 @@ export class FeedingSessionsListComponent {
         const index = this.feedingSessions.findIndex(session => session.id === id);
         if (index !== -1) {
           this.feedingSessions.splice(index, 1); // Remove the deleted session from the array
+          let amountConsumedSum = 0;
+          let durationSum = 0;
+          for(let feedingSession of this.feedingSessions){
+            amountConsumedSum += feedingSession.amountConsumed;
+            durationSum += feedingSession.duration;
+          }
+          this.averageTime = durationSum / this.feedingSessions.length;
+          this.averageAmountConsumed = amountConsumedSum / this.feedingSessions.length;
         }
       }
     );

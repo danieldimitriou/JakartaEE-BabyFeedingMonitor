@@ -53,8 +53,11 @@ export class LoginComponent {
           console.log(jwt);
           console.log(this.authService.currentUserSubject);
           console.log(this.authService.currentUserValue);
-
-          this.router.navigate(['/adminHome']); // Redirect to adminHome page
+          if(this.authService.currentUserValue["role"] == "admin"){
+            this.router.navigate(['/adminHome']); // Redirect to adminHome page
+          }else{
+            this.router.navigate(['/physicianHome']); // Redirect to adminHome page
+          }
         }
       }
     );
