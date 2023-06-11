@@ -87,7 +87,7 @@ public class FeedingSessionServiceImpl implements FeedingSessionService {
 
             String title = "Feeding Session Chart";
             String xLabel = "Date";
-            String yLabel = "Average Amount Consumed";
+            String yLabel = "Average Amount Consumed in ml.";
 
             byte[] chartImage = generateLineChart(dates, amountsConsumed, title, xLabel, yLabel);
             return Optional.of(chartImage);
@@ -107,7 +107,7 @@ public class FeedingSessionServiceImpl implements FeedingSessionService {
     private byte[] generateLineChart(Date[] dates, double[] amounts, String title, String xLabel, String yLabel) {
         DefaultXYDataset dataset = new DefaultXYDataset();
         double[][] seriesData = new double[][] { convertDatesToMillis(dates), amounts };
-        dataset.addSeries("Series 1", seriesData);
+        dataset.addSeries("Date", seriesData);
 
         JFreeChart chart = ChartFactory.createXYLineChart(
                 title,
@@ -149,15 +149,6 @@ public class FeedingSessionServiceImpl implements FeedingSessionService {
             millis[i] = dates[i].getTime();
         }
         return millis;
-    }
-
-
-    private double[] getTimeSeries(Date[] dates) {
-        double[] timeSeries = new double[dates.length];
-        for (int i = 0; i < dates.length; i++) {
-            timeSeries[i] = dates[i].getTime();
-        }
-        return timeSeries;
     }
 
     @Override

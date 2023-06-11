@@ -16,6 +16,7 @@ import { PhysicianHomeComponent } from './components/physician-home/physician-ho
 import { UpdateFeedingSessionComponent } from './components/update-feeding-session/update-feeding-session.component';
 import { HeaderComponent } from './components/common/header/header.component';
 import { FeedingSessionsListComponent } from './components/common/feeding-sessions-list/feeding-sessions-list.component';
+// import {BasicAuthInterceptor} from "./helpers/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { FeedingSessionsListComponent } from './components/common/feeding-sessio
     NgxMaterialTimepickerModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent],
 
 })

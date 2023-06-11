@@ -10,14 +10,18 @@ import gr.athtech.backend.responses.SuccessResponse;
 import gr.athtech.backend.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
+import org.eclipse.persistence.sessions.Login;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.sql.SQLException;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 
 @Path("/user")
 public class UserResource {
@@ -49,7 +53,7 @@ public class UserResource {
     @Path("login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-//    @RolesAllowed("admin")
+    @PermitAll
     public Response login(LoginData loginData) throws SQLException, JsonProcessingException, LoginException {
         ObjectMapper objectMapper = new ObjectMapper();
         try {

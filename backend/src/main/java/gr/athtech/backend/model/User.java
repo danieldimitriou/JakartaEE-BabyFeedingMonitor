@@ -32,11 +32,11 @@ public class User {
     @Column(name="password")
     @NotNull
     private String password;
-    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     @NotNull
-    private String role;
+    private Role role;
 
-    public User(String firstName, String lastName, String role, String email, String password){
+    public User(String firstName, String lastName, Role role, String email, String password){
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;

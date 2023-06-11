@@ -1,5 +1,6 @@
 package gr.athtech.backend.repository;
 
+import gr.athtech.backend.model.Role;
 import gr.athtech.backend.model.User;
 import gr.athtech.backend.model.FeedingSession;
 import jakarta.persistence.EntityManager;
@@ -19,8 +20,8 @@ public class TableCreator {
     private static final Logger logger = LogManager.getLogger(TableCreator.class);
 
     public static void main(String[] args) {
-        User admin = new User("daniel", "dimitriou", "admin", "a@a.com", "1");
-        User parent = new User("daniel", "dimitriou", "physician", "b@a.com", "1");
+        User admin = new User("daniel", "dimitriou", Role.ADMIN, "a@a.com", "1");
+        User parent = new User("daniel", "dimitriou", Role.PHYSICIAN, "b@a.com", "1");
 
         // Start date and time
         Calendar calendar = Calendar.getInstance();

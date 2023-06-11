@@ -1,5 +1,5 @@
-//package gr.athtech.backend.config;
-//
+//package gr.athtech.backend.config;//package gr.athtech.backend.config;
+////
 //import gr.athtech.backend.resource.FeedingSessionResource;
 //import io.jsonwebtoken.Claims;
 //import io.jsonwebtoken.JwtException;
@@ -24,11 +24,11 @@
 //@PreMatching
 //@Provider
 //@Priority(Priorities.AUTHORIZATION + 1)
-//public class RoleBasedAccessFilter implements ContainerRequestFilter {
+//public class SecurityFilter implements ContainerRequestFilter {
 //
 //    @Context
 //    private ResourceInfo resourceInfo;
-//    private static final Logger logger = (Logger) LogManager.getLogger(RoleBasedAccessFilter.class);
+//    private static final Logger logger = (Logger) LogManager.getLogger(SecurityFilter.class);
 //
 //    @Override
 //    public void filter(ContainerRequestContext requestContext) {
@@ -104,11 +104,97 @@
 //
 //    private boolean hasRequiredRole(Set<String> userRoles, Set<String> requiredRoles) {
 //        for (String role : requiredRoles) {
-//            if (role.equals("admin") && userRoles.contains("admin")) {
+//            if (role.equals("ADMIN") && userRoles.contains("ADMIN")) {
 //                return true;
 //            }
 //        }
 //        return false;
 //    }
 //
+//}
+
+
+
+
+
+
+//--------------------------------------------------------------------------------------------------------
+//import java.lang.reflect.Method;
+//import gr.athtech.backend.JWTGenerator;
+//import gr.athtech.backend.model.Role;
+//import gr.athtech.backend.service.AuthenticationService;
+//import io.jsonwebtoken.Claims;
+//import io.jsonwebtoken.Jwts;
+//import lombok.NoArgsConstructor;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.core.Logger;
+//
+//import javax.annotation.security.PermitAll;
+//import javax.inject.Inject;
+//import javax.ws.rs.container.ContainerRequestContext;
+//import javax.ws.rs.container.ContainerRequestFilter;
+//import javax.ws.rs.core.Context;
+//import javax.ws.rs.core.HttpHeaders;
+//import javax.ws.rs.core.Response;
+//import javax.ws.rs.ext.Provider;
+//import java.io.IOException;
+//import javax.ws.rs.container.ResourceInfo;
+//@Provider
+//@NoArgsConstructor
+//public class SecurityFilter implements ContainerRequestFilter {
+//    @Inject
+//    private AuthenticationService authenticationService;
+//    private static final Logger logger = (Logger) LogManager.getLogger(ContainerRequestFilter.class);
+//    @Context
+//    private ResourceInfo resourceInfo;
+//    @Override
+//    public void filter(ContainerRequestContext requestContext) throws IOException {
+//        Method method = resourceInfo.getResourceMethod();
+//        if (method.isAnnotationPresent(PermitAll.class)) {
+//            return;
+//        }
+//        String path = requestContext.getUriInfo().getPath();
+////        if(method.)
+//        // Check if the URL is for login
+//        if ("user/login".equals(path)) {
+//            logger.error("LOGIN");
+//            return;
+//        }
+//
+//        // Get the Authorization header from the request
+//        String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+//        logger.error(authorizationHeader);
+//
+//        // Check if the Authorization header is present and contains a JWT
+//        if (authorizationHeader != null && authorizationHeader.startsWith("Basic ")) {
+//            // Extract the JWT from the Authorization header
+//            String jwt = authorizationHeader.substring("Basic ".length()).trim();
+//
+//            try {
+//                // Parse the JWT and extract the claims
+//                Claims claims = Jwts.parser()
+//                        .setSigningKey(JWTGenerator.signingKey)
+//                        .parseClaimsJws(jwt)
+//                        .getBody();
+//
+//                // Extract the "role" claim from the JWT
+//                String role = claims.get("role", String.class);
+//
+//                // Check authorization based on role and HTTP method
+//                if (Role.ADMIN.toString().equals(role)) {
+//                    // User is authorized as Admin
+//                    return;
+//                } else if (Role.PHYSICIAN.toString().equals(role) && "GET".equalsIgnoreCase(requestContext.getMethod())) {
+//                    // User is authorized as Physician and the method is GET
+//                    return;
+//                }
+//            } catch (Exception e) {
+//                // Invalid JWT or claims, deny access
+//                logger.error("Invalid JWT: " + e.getMessage());
+//            }
+//        }
+//
+//        // Deny access for unauthorized requests
+//        requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+//    }
 //}

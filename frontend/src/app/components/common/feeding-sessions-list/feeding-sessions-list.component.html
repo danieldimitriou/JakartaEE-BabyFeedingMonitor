@@ -1,20 +1,16 @@
-<div class="flex justify-center mt-32">
-  <button type="button" (click)="getFeedingSessionChart()"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Graph</button>
-</div>
-<div *ngIf="chartUrl" class="flex justify-center">
-  <img [src]="chartUrl" alt="dsadsaas">
-</div>
 
 
+<div class="mt-6 text-center">
+  <p class="text-6xl">Past Feeding Sessions</p>
+</div>
 <div class="text-center my-16 ">
   <div class="text-center w-fit mx-auto">
-    <div class="border  text-center mb-8">
-      <div><p class="text-2xl">Average Time per Feeding Session:</p></div>
+    <div class="  text-center mb-8">
+      <div><p class="text-2xl">Overall Average Time per Feeding Session:</p></div>
       <div><p class="text-3xl">{{averageTime.toFixed(1)}} minutes</p></div>
     </div>
-    <div class="border ">
-      <div><p class="text-2xl">Average Amount of Milk consumed per Feeding Session:</p></div>
+    <div class=" ">
+      <div><p class="text-2xl">Overall Average Amount of Milk consumed per Feeding Session:</p></div>
       <div><p class="text-3xl">{{averageAmountConsumed.toFixed(2)}} ml</p></div>
     </div>
   </div>
@@ -48,6 +44,7 @@
   </form>
 </div>
 <div class="max-w-full">
+
   <div  *ngIf="!isListEmpty" class="grid grid-cols-3 gap-4 justify-between mt-32 mb-52">
     <ng-container *ngFor="let session of feedingSessions">
       <div [ngClass]="{'border': true, 'border-gray-300': true, 'rounded-lg': true, 'p-6': true, 'bg-white': true, 'shadow-md': true, 'w-72': true, 'text-justify': true, 'justify-self-center': true, 'cursor-pointer': isUserAdmin}"
@@ -65,6 +62,7 @@
         <div class="m-3">
           <div class="text-center mb-2 mt-12">
             <button *ngIf="isUserAdmin"
+
                     type="button"
                     routerLink="/updateFeedingSession"
                     [queryParams]="{ id: session.id }"
@@ -80,6 +78,7 @@
 
     <ng-template #notAdmin>
       <div class="border border-gray-300 rounded-lg p-6 bg-white shadow-md w-72 text-justify justify-self-center">
+
         <div class="inner-div">
 <!--          <div class="text-xl text-center font-semibold">{{ session.id }}</div>-->
           <div class="text-3xl font-bold font-semibold">{{ session.date | date }}</div>
@@ -92,4 +91,13 @@
     </ng-template>
     </ng-container>
   </div>
+</div>
+
+
+<div class="flex justify-center mt-6 mb-32">
+  <button type="button" (click)="getFeedingSessionChart()"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generate Graph showing all feedings</button>
+</div>
+<div *ngIf="chartUrl" class="flex justify-center mb-32">
+  <img [src]="chartUrl" alt="dsadsaas">
 </div>

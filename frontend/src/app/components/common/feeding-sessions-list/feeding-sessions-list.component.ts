@@ -4,7 +4,6 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ApiService} from "../../../services/api.service";
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../../../services/authentication.service";
-import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-feeding-sessions-list',
@@ -21,11 +20,11 @@ export class FeedingSessionsListComponent {
   chartUrl
   filterByTimeForm: FormGroup;
   notAdmin: any;
-  constructor(private apiService: ApiService, private router: Router,  private formBuilder: FormBuilder, private authService: AuthenticationService, private sanitizer: DomSanitizer
+  constructor(private apiService: ApiService, private router: Router,  private formBuilder: FormBuilder, private authService: AuthenticationService
   ) {
     this.averageAmountConsumed = 0.0;
     this.averageTime = 0.0;
-    if(this.authService.currentUserValue.role == "admin"){
+    if(this.authService.currentUserValue.role == "ADMIN"){
      this.isUserAdmin = true;
     }
     this.getAllFeedingSessions();
@@ -101,10 +100,10 @@ export class FeedingSessionsListComponent {
         }
         else{
           this.isListEmpty = true;
+          this.averageTime = 0;
+          this.averageAmountConsumed = 0;
           this.error = "No feeding sessions available at those dates";
         }
-
-        // console.log(next);
       }
     )
   }

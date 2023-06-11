@@ -42,7 +42,7 @@ export class LoginComponent {
       email: this.formValues["email"].value,
       password: this.formValues["password"].value
     };
-
+    console.log(this.loginData)
     this.authService.login(this.loginData).subscribe(
       next => {
         console.log(next);
@@ -53,7 +53,7 @@ export class LoginComponent {
           console.log(jwt);
           console.log(this.authService.currentUserSubject);
           console.log(this.authService.currentUserValue);
-          if(this.authService.currentUserValue["role"] == "admin"){
+          if(this.authService.currentUserValue["role"] == "ADMIN"){
             this.router.navigate(['/adminHome']); // Redirect to adminHome page
           }else{
             this.router.navigate(['/physicianHome']); // Redirect to adminHome page

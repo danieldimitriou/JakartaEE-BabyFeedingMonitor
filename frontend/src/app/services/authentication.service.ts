@@ -44,6 +44,7 @@ export class AuthenticationService {
       })
     );
 
+
   }
   saveUserToLocalStorage(jwt: string, role: string){
     let user: UserData = {
