@@ -4,7 +4,7 @@ import {AuthenticationService} from "../services/authentication.service";
 
 
 @Injectable({ providedIn: 'root' })
-export class AuthGuard implements CanActivate {
+export class PhysicianAuthGuard implements CanActivate {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
@@ -12,17 +12,17 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentUser = this.authenticationService.currentUserValue;
-    // console.log(currentUser);
-    if (currentUser.role == "admin") {
+    if(currentUser.role == "ADMIN"){
+      this.router.navigate(['/adminHome']);
+    }
+    if(!currentUser){
+      this.router.navigate(['/login']);
+      return false;
+    }
+    if (currentUser.role == "PHYSICIAN") {
       // logged in so return true
       return true;
     }
-    // console.log(this.route.snapshot.url)
-
-    // not logged in so redirect to login page with the return url
-    // console.log(state.url)
-    this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-    // console.log(state.url);
     return false;
   }
 }

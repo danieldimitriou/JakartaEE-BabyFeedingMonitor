@@ -14,12 +14,13 @@ export class HeaderComponent implements OnInit{
   }
   ngOnInit() {
     if(this.authService.currentUserValue){
-      console.log(this.authService.currentUserValue["role"])
+      // console.log(this.authService.currentUserValue["role"])
       this.isLoggedIn = true;
+      if(this.authService.currentUserValue["role"] == "ADMIN"){
+        this.isUserAdmin = true;
+      }
     }
-    if(this.authService.currentUserValue["role"] == "admin"){
-      this.isUserAdmin = true;
-    }
+
   }
 
   logout() {

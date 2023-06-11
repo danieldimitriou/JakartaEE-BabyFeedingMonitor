@@ -1,12 +1,10 @@
 package gr.athtech.backend.resource;
 import gr.athtech.backend.dto.FeedingSessionListDTO;
+import gr.athtech.backend.model.Role;
+import gr.athtech.backend.responses.ChartResponse;
 import gr.athtech.backend.responses.FeedingSessionListResponse;
-import org.glassfish.jersey.server.ResourceConfig;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import gr.athtech.backend.config.RoleBasedAccessFilter;
-//import gr.athtech.backend.config.UserStore;
 import gr.athtech.backend.model.FeedingSession;
 import gr.athtech.backend.repository.FeedingSessionRepository;
 import gr.athtech.backend.responses.ErrorResponse;
@@ -14,13 +12,14 @@ import gr.athtech.backend.responses.SuccessResponse;
 import gr.athtech.backend.service.FeedingSessionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
+
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +34,7 @@ public class FeedingSessionResource{
     @GET
     @Path("getAll")
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response getAllFeedingSessions() {
         logger.error("GET ALL FEEDING SESSIONS REQUUEST");
         ObjectMapper objectMapper = new ObjectMapper();
@@ -60,6 +60,7 @@ public class FeedingSessionResource{
     @GET
     @Path("/filterByDates")
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response getByDate(@QueryParam("startDate") Date startDateStr, @QueryParam("endDate") Date endDateStr) {
         logger.error(startDateStr);
         logger.error(endDateStr);
@@ -86,6 +87,7 @@ public class FeedingSessionResource{
     @Path("{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
     public Response getFeedingSession(@PathParam("id") int id) {
         Optional<FeedingSession> feedingSession = this.feedingSessionService.getFeedingSessionById(id);
         if (feedingSession.isPresent()) {
@@ -99,6 +101,7 @@ public class FeedingSessionResource{
     @Path("/delete/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
     public Response deleteFeedingSession(@PathParam("id") int id) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         try{
@@ -117,18 +120,45 @@ public class FeedingSessionResource{
                         .build();
             }
         }catch (Exception e){
-            String responseJson = objectMapper.writeValueAsString(new SuccessResponse("Error occured when deleting resource."));
+            String responseJson = objectMapper.writeValueAsString(new ErrorResponse("Error occured when deleting resource."));
             throw new NotFoundException("Feeding session not found");
 
         }
     }
+    @Path("/chart")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @PermitAll
+    public Response getChart() throws JsonProcessingException {
+        logger.error("chart");
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            byte[] chart = this.feedingSessionService.getChart().get();
+
+                String responseJson = objectMapper.writeValueAsString(new ChartResponse("Chart Generated Successfully", chart));
+
+                return Response.status(Response.Status.CREATED)
+                        .entity(responseJson)
+                        .build();
+
+
+        }catch (Exception e){
+            String responseJson = objectMapper.writeValueAsString(new ErrorResponse(e.toString()));
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(responseJson)
+                    .build();
+
+        }
+    }
+
     @POST
     @Path("create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-//    @RolesAllowed("admin")
+    @RolesAllowed("ADMIN")
     public Response createFeedingSession(FeedingSession feedingSessionJSON) throws JsonProcessingException {
-        logger.error("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        logger.error("create feeding session resource");
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             // Your code to create the feeding session
@@ -166,6 +196,7 @@ public class FeedingSessionResource{
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("ADMIN")
     public Response update(FeedingSession feedingSessionJSON) {
         try {
             logger.error("---------------------------------------------------");
@@ -187,18 +218,4 @@ public class FeedingSessionResource{
                     .build();
         }
     }
-//    @Override
-//    public ResourceConfig configure() {
-//        return new ResourceConfig(FeedingSessionResource.class)
-//                .register(RoleBasedAccessFilter.class)
-//                .register(RolesAllowedDynamicFeature.class)
-//                .register(new AbstractBinder(){
-//                    @Override
-//                    protected void configure() {
-//                        bind(new UserStore()).to(UserStore.class);
-//                    }
-//                });
-//    }
-
-
 }

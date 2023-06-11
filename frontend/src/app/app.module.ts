@@ -15,6 +15,8 @@ import { AdminHomeComponent } from './components/admin-home/admin-home.component
 import { PhysicianHomeComponent } from './components/physician-home/physician-home.component';
 import { UpdateFeedingSessionComponent } from './components/update-feeding-session/update-feeding-session.component';
 import { HeaderComponent } from './components/common/header/header.component';
+import { FeedingSessionsListComponent } from './components/common/feeding-sessions-list/feeding-sessions-list.component';
+// import {BasicAuthInterceptor} from "./helpers/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { HeaderComponent } from './components/common/header/header.component';
     AdminHomeComponent,
     PhysicianHomeComponent,
     UpdateFeedingSessionComponent,
-    HeaderComponent
+    HeaderComponent,
+    FeedingSessionsListComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +40,8 @@ import { HeaderComponent } from './components/common/header/header.component';
     NgxMaterialTimepickerModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent],
 
 })

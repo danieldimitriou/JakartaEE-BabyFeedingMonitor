@@ -17,4 +17,5 @@ public interface UserRepository {
     boolean deleteUser(Long id);
     Optional<User> getUserByEmail(String email);
     LoginResponseData login(String email, String password) throws LoginException;
+    Optional<User> authenticateUser(String email, String password);
 }
